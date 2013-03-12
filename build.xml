@@ -51,15 +51,18 @@
     <fileset dir="." defaultexcludes="no">
       <include name="**/*~" />
       <include name="**/*.class" />
-        <include name="**/${grepjars}*.jar" />
-        <include name="**/${httpcat}*.jar" />
+      <include name="**/${grepjars}*.jar" />
+      <include name="**/${httpcat}*.jar" />
       <include name="${grepjars}*.sh" />
       <include name="${grepjars}*.bat" />
+      <include name="**/${groovy}*.jar" />
+      <include name="${groovy}*.bat" />
+      <include name="${groovy}*.sh" />
     </fileset>
   </delete>
 </target>
 
-<target name="all" depends="grep-jars"/>
+<target name="all" depends="groovy, grep-jars"/>
 
 <target name="lib" depends="groovy-lib">
   <mkdir dir="lib" />
@@ -99,6 +102,20 @@
         unix.script="${httpcatSh}"
         windows.script="${httpcatBat}"
   />
+</target>
+
+<target name="groovy.jar" depends="-unpack-groovy">
+  <jar destfile="${groovyJar}" compress="true" index="true">
+    <manifest>
+      <attribute name="Main-Class" value="groovy.ui.GroovyMain"/>
+    </manifest>
+    <zipgroupfileset dir="${groovy.home}" includes="embeddable/groovy-all-*.jar" excludes="embeddable/*indy*jar" />
+  </jar>
+</target>
+
+<target name="groovy" depends="groovy.jar">
+  <wrap basename="${groovy}">
+  </wrap>
 </target>
 
 <target name="grep-jars" depends="-unpack-groovy, compile">
