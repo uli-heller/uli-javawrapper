@@ -88,13 +88,13 @@ Compile Project
 ### Compile Using A Preinstalled ANT
 
 ```sh
-ant dist
+ant
 ```
 
 ### Compile Without A Preinstalled ANT
 
 ```sh
-bin/ant.sh dist
+bin/ant.sh
 ```
 
 GitHub
