@@ -162,8 +162,8 @@ Here is a list of the 3rd party products and tools we are using for this project
 Links And Notes
 ---------------
 
-* [StackOverflow: Groovy - Methods and parameters](http://stackoverflow.com/questions/3782250/groovy-reflection-on-a-java-class-methods-and-parameters)
-* [BeyondLinux: Dynamically compile a java class](http://www.beyondlinux.com/2011/07/20/3-steps-to-dynamically-compile-instantiate-and-run-a-java-class/)
+* [ReallyExecutableJars](http://skife.org/java/unix/2011/06/20/really_executable_jars.html)
+* [WrappingGroovyScript](http://groovy.codehaus.org/WrappingGroovyScript)
 
 Problems And Issues
 -------------------
