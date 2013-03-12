@@ -24,6 +24,10 @@ Java
     * Windows command line window: Execute `.\{name}.bat`
     * Windows desktop: Double-click on the bat file
 * Example: `ant http-cat` generates bin/http-cat.sh and bin/http-cat.bat
+    * Unix: `bin/http-cat.sh http://google.com`
+    * Windows: `bin\http-cat.bat http://google.com`
+    * Note-1: The sh/bat file is completely self-contained. It only depends on Java. Feel free to copy it to other systems and use it there, too.
+    * Note-2: Yes, the advantage of packaging it like this isn't very great. Look at the groovy example for a greater benefit!
 
 Groovy
 ------
@@ -43,7 +47,10 @@ TBD
     * Unix desktop: Double-click on the sh file
     * Windows command line window: Execute `.\{name}.bat`
     * Windows desktop: Double-click on the bat file
-* Example: `ant grep-jars` generates bin/grep-jars*.sh and bin/grep-jars*.bat
+* Example: `ant grep-jars` generates bin/grep-jars.sh and bin/grep-jars.bat
+    * Unix: `./grep-jars.sh Logger`
+    * Windows: `.\grep-jars.bat Logger`
+    * Note: The sh/bat file is completely self-contained. It only depends on Java. Feel free to copy it to other systems and use it there, too.
 
 Cloning The GitHub Repo
 -----------------------
