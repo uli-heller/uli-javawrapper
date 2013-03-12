@@ -110,6 +110,8 @@
       <attribute name="Main-Class" value="groovy.ui.GroovyMain"/>
     </manifest>
     <zipgroupfileset dir="${groovy.home}" includes="embeddable/groovy-all-*.jar" excludes="embeddable/*indy*jar" />
+    <zipgroupfileset dir="${groovy.home}" includes="lib/ant-*.jar" />     <!-- AntBuilder -->
+    <zipgroupfileset dir="${groovy.home}" includes="lib/common-*.jar" />  <!-- CliBuilder -->
   </jar>
 </target>
 
