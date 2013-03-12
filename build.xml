@@ -59,8 +59,7 @@
   </delete>
 </target>
 
-<target name="all" depends="http-cat, grep-jars"/>
-
+<target name="all" depends="grep-jars"/>
 
 <target name="lib" depends="groovy-lib">
   <mkdir dir="lib" />
