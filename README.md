@@ -120,9 +120,11 @@ $ jmacs README.txt # Enter description of the branch
 $ git add README.txt
 $ git commit -m "Created branch: downloads"
 $ git push --set-upstream origin downloads
-$ cp .../uli-javawrapper-0.1.bat .
-$ cp .../uli-javawrapper-0.1.sh .
-$ git add uli-javawrapper-0.1.bat uli-javawrapper-0.1.sh
+$ cp .../groovy.sh ./groovy-0.1.sh
+$ cp .../groovy.bat ./groovy-0.1.bat
+$ cp .../grep-jars.sh ./grep-jars-0.1.sh
+$ cp .../grep-jars.bat ./grep-jars-0.1.bat
+$ git add groovy*.bat groovy*.sh grep-jars*.bat grep-jars*.sh
 $ git commit -m "Added downloads of version 0.1" .
 $ git push # might take some time depending on your internet connection bandwidth
 $ git checkout master # switch back to master
