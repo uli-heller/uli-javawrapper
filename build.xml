@@ -94,17 +94,11 @@
 </target>
 
 <target name="http-cat" depends="http-cat.jar">
-  <copy overwrite="true" file="scripts/dist.sh" tofile="${httpcatSh}"/>
-  <fixcrlf file="${httpcatSh}" eol="unix" eof="remove"/>
-  <concat append="true" binary="true" destfile="${httpcatSh}">
-    <fileset dir="." includes="${httpcatJar}"/>
-  </concat>
-  <chmod file="${httpcatSh}" perm="a+x"/>
-  <copy overwrite="true" file="scripts/dist.bat" tofile="${httpcatBat}"/>
-  <fixcrlf file="${httpcatBat}" eol="dos" eof="add"/>
-  <concat append="true" binary="true" destfile="${httpcatBat}">
-    <fileset dir="." includes="${httpcatJar}"/>
-  </concat>
+  <wrap basename="${httpcat}"
+        jar="${httpcatJar}"
+        unix.script="${httpcatSh}"
+        windows.script="${httpcatBat}"
+  />
 </target>
 
 <target name="grep-jars" depends="-unpack-groovy, compile">
@@ -117,16 +111,30 @@
     <arg value="-m"/>
     <arg value="grepJars"/>
   </exec>
-  <copy overwrite="true" file="scripts/dist.sh" tofile="${grepjarsSh}"/>
-  <fixcrlf file="${grepjarsSh}" eol="unix" eof="remove"/>
-  <concat append="true" binary="true" destfile="${grepjarsSh}">
-    <fileset dir="." includes="${grepjarsJar}"/>
-  </concat>
-  <chmod file="${grepjarsSh}" perm="a+x"/>
-  <copy overwrite="true" file="scripts/dist.bat" tofile="${grepjarsBat}"/>
-  <fixcrlf file="${grepjarsBat}" eol="dos" eof="add"/>
-  <concat append="true" binary="true" destfile="${grepjarsBat}">
-    <fileset dir="." includes="${grepjarsJar}"/>
-  </concat>
+  <wrap basename="${grepjars}" jar="${grepjarsJar}">
+  </wrap>
 </target>
+
+<macrodef name="wrap">
+  <attribute name="basename"/>
+  <attribute name="jar" default="@{basename}.jar" />
+  <attribute name="unix.script" default="@{basename}.sh" />
+  <attribute name="windows.script" default="@{basename}.bat" />
+  <attribute name="unix.stub"    default="scripts/dist.sh"/>
+  <attribute name="windows.stub" default="scripts/dist.bat"/>
+  <sequential>
+    <copy overwrite="true" file="@{unix.stub}" tofile="@{unix.script}"/>
+    <fixcrlf file="@{unix.script}" eol="unix" eof="remove"/>
+    <concat append="true" binary="true" destfile="@{unix.script}">
+      <fileset dir="." includes="@{jar}"/>
+    </concat>
+    <chmod file="@{unix.script}" perm="a+x"/>
+    <copy overwrite="true" file="@{windows.stub}" tofile="@{windows.script}"/>
+    <fixcrlf file="@{windows.script}" eol="dos" eof="add"/>
+    <concat append="true" binary="true" destfile="@{windows.script}">
+      <fileset dir="." includes="@{jar}"/>
+    </concat>
+  </sequential>
+</macrodef>
+
 </project>
