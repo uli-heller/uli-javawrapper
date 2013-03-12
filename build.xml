@@ -1,0 +1,133 @@
+<project name="uli-javawrapper" default="all">
+
+<tstamp/>
+
+<loadproperties>
+  <file file="build.properties"/>
+</loadproperties>
+
+<condition property="EXT" value=".bat" else=".sh">
+  <os family="windows"/>
+</condition>
+<condition property="GROOVY" value="groovy.bat" else="groovy.sh">
+  <os family="windows"/>
+</condition>
+
+<path id="classpath.base">
+  <pathelement location="${classes}" />
+  <fileset dir="lib">
+    <include name="**/*.jar"/>
+  </fileset>
+</path>
+
+<path id="classpath.groovy">
+  <path refid="classpath.base" />
+  <pathelement location="bin/groovy/lib/*" />
+  <pathelement location="bin/groovy/embeddable/*" />
+</path>
+
+<target name="-prepare">
+  <exec executable="${basedir}/bin/prepare${EXT}" dir="${basedir}">
+  </exec>
+</target> <!-- -prepare -->
+
+<target name="compile" depends="-prepare, lib, compile-java" />
+
+<target name="compile-java">
+  <mkdir dir="${classes}"/>
+  <javac srcdir="src/main/java" debug="true" destdir="${classes}" includeAntRuntime="false">
+    <classpath>
+      <path refid="classpath.base" />
+    </classpath>
+  </javac>
+</target>
+
+<target name="clean">
+  <delete dir="tmp" />
+  <delete dir="lib" />
+  <delete dir="build" />
+  <delete dir="bin/groovy" />
+  <delete>
+    <fileset dir="." defaultexcludes="no">
+      <include name="**/*~" />
+      <include name="**/*.class" />
+        <include name="**/${grepjars}*.jar" />
+        <include name="**/${httpcat}*.jar" />
+      <include name="${grepjars}*.sh" />
+      <include name="${grepjars}*.bat" />
+    </fileset>
+  </delete>
+</target>
+
+<target name="all" depends="http-cat, grep-jars"/>
+
+
+<target name="lib" depends="groovy-lib">
+  <mkdir dir="lib" />
+</target>
+
+<target name="-check-unpack-groovy" unless="groovy.is.unpacked">
+    <available property="groovy.is.unpacked" file="bin/groovy/bin/groovy"/>
+</target>
+<target name="-unpack-groovy" depends="-check-unpack-groovy" unless="${groovy.is.unpacked}">
+  <exec executable="${basedir}/bin/prepare${EXT}">
+  </exec>
+</target>
+
+<target name="groovy-lib" depends="-unpack-groovy">
+  <copy todir="lib" flatten="true">
+    <fileset dir="bin/groovy/lib">
+      <include name="**/*.jar" />
+    </fileset>
+    <fileset dir="bin/groovy/embeddable">
+      <include name="**/*.jar" />
+      <exclude name="**/*-indy.jar" />
+    </fileset>
+  </copy>
+</target>
+
+<target name="http-cat.jar" depends="compile">
+  <jar destfile="${httpcatJar}" basedir="build/classes" includes="**/HttpCat.class">
+    <manifest>
+      <attribute name="Main-Class" value="org.uli.httpcat.HttpCat"/>
+    </manifest>
+  </jar>
+</target>
+
+<target name="http-cat" depends="http-cat.jar">
+  <copy overwrite="true" file="scripts/dist.sh" tofile="${httpcatSh}"/>
+  <fixcrlf file="${httpcatSh}" eol="unix" eof="remove"/>
+  <concat append="true" binary="true" destfile="${httpcatSh}">
+    <fileset dir="." includes="${httpcatJar}"/>
+  </concat>
+  <chmod file="${httpcatSh}" perm="a+x"/>
+  <copy overwrite="true" file="scripts/dist.bat" tofile="${httpcatBat}"/>
+  <fixcrlf file="${httpcatBat}" eol="dos" eof="add"/>
+  <concat append="true" binary="true" destfile="${httpcatBat}">
+    <fileset dir="." includes="${httpcatJar}"/>
+  </concat>
+</target>
+
+<target name="grep-jars" depends="-unpack-groovy, compile">
+  <exec executable="${basedir}/bin/${GROOVY}" dir="groovy-scripts">
+    <env key="GROOVY_HOME" path="${basedir}/bin/groovy"/>
+    <arg value="UliGroovyWrapper"/>
+    <arg value="-c"/>
+    <arg value="-d"/>
+    <arg value="${basedir}/${grepjarsJar}"/>
+    <arg value="-m"/>
+    <arg value="grepJars"/>
+  </exec>
+  <copy overwrite="true" file="scripts/dist.sh" tofile="${grepjarsSh}"/>
+  <fixcrlf file="${grepjarsSh}" eol="unix" eof="remove"/>
+  <concat append="true" binary="true" destfile="${grepjarsSh}">
+    <fileset dir="." includes="${grepjarsJar}"/>
+  </concat>
+  <chmod file="${grepjarsSh}" perm="a+x"/>
+  <copy overwrite="true" file="scripts/dist.bat" tofile="${grepjarsBat}"/>
+  <fixcrlf file="${grepjarsBat}" eol="dos" eof="add"/>
+  <concat append="true" binary="true" destfile="${grepjarsBat}">
+    <fileset dir="." includes="${grepjarsJar}"/>
+  </concat>
+</target>
+</project>
