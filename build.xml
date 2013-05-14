@@ -62,7 +62,7 @@
   </delete>
 </target>
 
-<target name="all" depends="groovy, grep-jars"/>
+<target name="all" depends="groovy, grep-jars, md5sum"/>
 
 <target name="lib" depends="groovy-lib">
   <mkdir dir="lib" />
@@ -132,6 +132,22 @@
   </exec>
   <wrap basename="${grepjars}" jar="${grepjarsJar}">
   </wrap>
+</target>
+
+<target name="md5sum.jar" depends="compile">
+  <jar destfile="${md5sumJar}" basedir="build/classes" includes="**/MD5Sum.class">
+    <manifest>
+      <attribute name="Main-Class" value="org.uli.md5.MD5Sum"/>
+    </manifest>
+  </jar>
+</target>
+
+<target name="md5sum" depends="md5sum.jar">
+  <wrap basename="${md5sum}"
+        jar="${md5sumJar}"
+        unix.script="${md5sumSh}"
+        windows.script="${md5sumBat}"
+  />
 </target>
 
 <macrodef name="wrap">
