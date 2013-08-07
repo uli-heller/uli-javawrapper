@@ -56,6 +56,8 @@
       <include name="**/${httpcat}*.jar" />
       <include name="${grepjars}*.sh" />
       <include name="${grepjars}*.bat" />
+      <include name="${httpcat}*.sh" />
+      <include name="${httpcat}*.bat" />
       <include name="${md5sum}*.sh" />
       <include name="${md5sum}*.bat" />
       <include name="**/${groovy}*.jar" />
