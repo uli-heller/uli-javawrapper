@@ -52,9 +52,12 @@
       <include name="**/*~" />
       <include name="**/*.class" />
       <include name="**/${grepjars}*.jar" />
+      <include name="**/${md5sum}*.jar" />
       <include name="**/${httpcat}*.jar" />
       <include name="${grepjars}*.sh" />
       <include name="${grepjars}*.bat" />
+      <include name="${md5sum}*.sh" />
+      <include name="${md5sum}*.bat" />
       <include name="**/${groovy}*.jar" />
       <include name="${groovy}*.bat" />
       <include name="${groovy}*.sh" />
@@ -62,7 +65,7 @@
   </delete>
 </target>
 
-<target name="all" depends="groovy, grep-jars, md5sum"/>
+<target name="all" depends="groovy, grep-jars, httpcat, md5sum"/>
 
 <target name="lib" depends="groovy-lib">
   <mkdir dir="lib" />
@@ -88,7 +91,7 @@
   </copy>
 </target>
 
-<target name="http-cat.jar" depends="compile">
+<target name="httpcat.jar" depends="compile">
   <jar destfile="${httpcatJar}" basedir="build/classes" includes="**/HttpCat.class">
     <manifest>
       <attribute name="Main-Class" value="org.uli.httpcat.HttpCat"/>
@@ -96,7 +99,7 @@
   </jar>
 </target>
 
-<target name="http-cat" depends="http-cat.jar">
+<target name="httpcat" depends="httpcat.jar">
   <wrap basename="${httpcat}"
         jar="${httpcatJar}"
         unix.script="${httpcatSh}"
