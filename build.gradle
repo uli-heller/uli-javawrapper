@@ -1,1 +1,7 @@
 apply plugin: 'java'
+
+// build a fat jar (http://docs.codehaus.org/display/GRADLE/Cookbook#Cookbook-Creatingafatjar)
+// the jar will be named build/libs/uli-javawrapper.jar
+jar {
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+}
